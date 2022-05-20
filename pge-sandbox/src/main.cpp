@@ -1,8 +1,26 @@
 #include <stdio.h>
 #include <PGE/pge.h>
 
-int main(int argc, char** argv)
+class Sandbox : public pge::Application
 {
+public:
+    Sandbox()
+    {
 
-    return 0;
+    }
+
+    ~Sandbox()
+    {
+
+    }
+
+    void Run()
+    {
+        
+    }
+};
+
+pge::Application* pge::AppInit()
+{
+    return new Sandbox();
 }
