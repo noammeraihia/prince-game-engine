@@ -16,7 +16,7 @@ public:
 
     void Run()
     {
-        
+        PGE_LOG_TRACE("Heyy lads %d", 9)
     }
 };
 
