@@ -1,28 +1,48 @@
 #include "PGE/utils/pgeLogger.h"
 
-namespace pge 
+namespace pge
 {
-    void Logger::setPriority(LogPriority priority)
+    std::map<LogLevel, const char*> Logger::sLLvl2LStr;
+    std::map<LogLevel, int> Logger::sLLvl2LClr;
+
+    void Logger::Init()
     {
-        sPriority = priority;
+        sLLvl2LStr.insert(std::pair<LogLevel, const char*>(PGELLVL_FATAL, "FATAL"));
+        sLLvl2LStr.insert(std::pair<LogLevel, const char*>(PGELLVL_ERROR, "ERROR"));
+        sLLvl2LStr.insert(std::pair<LogLevel, const char*>(PGELLVL_INFO, "INFO"));
+        sLLvl2LStr.insert(std::pair<LogLevel, const char*>(PGELLVL_WARN, "WARN"));
+        sLLvl2LStr.insert(std::pair<LogLevel, const char*>(PGELLVL_DEBUG, "DEBUG"));
+
+        sLLvl2LClr.insert(std::pair<LogLevel, int>(PGELLVL_FATAL, FOREGROUND_RED | FOREGROUND_BLUE));
+        sLLvl2LClr.insert(std::pair<LogLevel, int>(PGELLVL_ERROR, FOREGROUND_RED));
+        sLLvl2LClr.insert(std::pair<LogLevel, int>(PGELLVL_INFO, 15));
+        sLLvl2LClr.insert(std::pair<LogLevel, int>(PGELLVL_WARN, FOREGROUND_RED | FOREGROUND_GREEN));
+        sLLvl2LClr.insert(std::pair<LogLevel, int>(PGELLVL_DEBUG, FOREGROUND_GREEN));
     }
 
-    template <typename... Args>
-    void Logger::trace(const char* message, Args... args){ PGE_LOGGER_LOG_PRESET(LPTRACE, "TRACE"); }
+    int Logger::Log(LogLevel lvl, const char* fmt, ...)
+    {
+        HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    template <typename... Args>
-    void Logger::debug(const char* message, Args... args) { PGE_LOGGER_LOG_PRESET(LPDEBUG, "DEBUG"); }
+        SetConsoleTextAttribute(h, sLLvl2LClr.at(lvl));
 
-    template <typename... Args>
-    void Logger::info(const char* message, Args... args) { PGE_LOGGER_LOG_PRESET(LPINFO, "INFO"); }
+        va_list arg;
+        int done;
 
-    template <typename... Args>
-    void Logger::warn(const char* message, Args... args) { PGE_LOGGER_LOG_PRESET(LPWARN, "WARNING"); }
+        time_t now = time(0);
+        char* dt = ctime(&now);
 
-    template <typename... Args>
-    void Logger::error(const char* message, Args... args) { PGE_LOGGER_LOG_PRESET(LPERROR, "ERROR"); }
+        dt[strcspn(dt, "\n")] = 0;
 
-    template <typename... Args>
-    void Logger::critical(const char* message, Args... args) { PGE_LOGGER_LOG_PRESET(LPCRITICAL, "CRITICAL"); }
+        char prefix[255];
+        sprintf(prefix, "PrinceGE - %s - [%s] : ", dt, sLLvl2LStr.at(lvl));
 
+        va_start(arg, fmt);
+        done = vfprintf(stdout, strcat(prefix, fmt), arg);
+        va_end(arg);
+
+        SetConsoleTextAttribute(h, 15);
+
+        return done;
+    }
 }

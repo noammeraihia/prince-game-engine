@@ -1,8 +1,10 @@
 file(GLOB pge_SRC
      "include/*.h"
      "include/*/*.h"
+     "include/*/*/*.h"
      "src/*.cpp"
      "src/*/*.cpp"
+     "src/*/*/*.cpp"
 )
 
 add_library(PrinceGE ${pge_SRC})

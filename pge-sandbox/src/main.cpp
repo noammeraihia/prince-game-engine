@@ -6,7 +6,7 @@ class Sandbox : public pge::Application
 public:
     Sandbox()
     {
-
+        pge::Logger::Init();
     }
 
     ~Sandbox()
@@ -16,7 +16,11 @@ public:
 
     void Run()
     {
-        PGE_LOG_TRACE("Heyy lads %d", 9)
+        pge::Logger::Log(pge::PGELLVL_FATAL, "Test Fatal\n");
+        pge::Logger::Log(pge::PGELLVL_ERROR, "Test Error\n");
+        pge::Logger::Log(pge::PGELLVL_INFO, "Test Info\n");
+        pge::Logger::Log(pge::PGELLVL_WARN, "Test Warn\n");
+        pge::Logger::Log(pge::PGELLVL_DEBUG, "Test Debug\n");
     }
 };
 
