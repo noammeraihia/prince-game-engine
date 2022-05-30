@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "PGE/graphics/pgeWindow.h"
+
 namespace pge
 {
     class Application
@@ -10,7 +12,13 @@ namespace pge
         Application();
         virtual ~Application();
 
+        void Init();
         virtual void Run();
+
+    protected:
+        bool mIsRunning;
+
+        graphics::Window* mWindow;
     };
 
     Application* AppInit();

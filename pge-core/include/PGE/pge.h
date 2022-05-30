@@ -1,8 +1,8 @@
 #pragma once
 
-#include "application.h"
+#include "pgeApplication.h"
 
-#include "core/core.h"
-#include "core/entrypoint.h"
+#include "core/pgeCore.h"
+#include "core/pgeEntrypoint.h"
 
 #include "utils/pgeLogger.h"

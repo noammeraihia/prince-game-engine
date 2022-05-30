@@ -32,3 +32,5 @@ namespace pge
         static std::map<LogLevel, int> sLLvl2LClr;
     };
 }
+
+#define PGE_LOG pge::Logger::Log

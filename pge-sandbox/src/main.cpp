@@ -7,21 +7,35 @@ public:
     Sandbox()
     {
         pge::Logger::Init();
+        pge::core::Init();
+        Init();
     }
 
     ~Sandbox()
     {
-
+        delete mWindow;
     }
 
     void Run()
     {
-        pge::Logger::Log(pge::PGELLVL_FATAL, "Test Fatal\n");
-        pge::Logger::Log(pge::PGELLVL_ERROR, "Test Error\n");
-        pge::Logger::Log(pge::PGELLVL_INFO, "Test Info\n");
-        pge::Logger::Log(pge::PGELLVL_WARN, "Test Warn\n");
-        pge::Logger::Log(pge::PGELLVL_DEBUG, "Test Debug\n");
+        while (mIsRunning)
+        {
+            while (SDL_PollEvent(&mEvent))
+            {
+                if (mEvent.type == SDL_QUIT)
+                {
+                    PGE_LOG(pge::PGELLVL_INFO, "Quiting...");
+                    mIsRunning = false;
+                }
+            }
+        }
+
+        SDL_Quit();
     }
+
+private:
+    SDL_Event mEvent;
+
 };
 
 pge::Application* pge::AppInit()

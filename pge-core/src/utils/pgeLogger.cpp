@@ -40,6 +40,7 @@ namespace pge
         va_start(arg, fmt);
         done = vfprintf(stdout, strcat(prefix, fmt), arg);
         va_end(arg);
+        printf("\n");
 
         SetConsoleTextAttribute(h, 15);
 
