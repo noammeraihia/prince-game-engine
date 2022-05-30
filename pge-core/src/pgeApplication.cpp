@@ -16,6 +16,7 @@ namespace pge
     void Application::Init()
     {
         mWindow = new graphics::Window();
+        mRenderer = new graphics::Renderer(mWindow->getHandle());
     }
 
     void Application::Run()

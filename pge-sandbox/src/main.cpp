@@ -28,6 +28,9 @@ public:
                     mIsRunning = false;
                 }
             }
+
+            mRenderer->Clear(pge::graphics::Color(255, 0, 255, 255));
+            mRenderer->Flush();
         }
 
         SDL_Quit();

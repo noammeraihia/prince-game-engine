@@ -14,6 +14,8 @@ namespace pge
             Window();
             ~Window();
 
+            inline SDL_Window* getHandle() { return mHandle; } ;
+
         private:
             SDL_Window* mHandle;
         };
