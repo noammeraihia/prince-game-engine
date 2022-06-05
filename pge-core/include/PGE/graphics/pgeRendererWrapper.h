@@ -9,21 +9,27 @@ namespace pge
 { 
     namespace graphics
     {
-        class Renderer
+        class RendererWrapper
         {
         public:
-            Renderer(SDL_Window* window);
-            ~Renderer();
+            RendererWrapper(SDL_Window* window);
+            ~RendererWrapper();
 
             inline SDL_Renderer* getHandle() { return mHandle; } ;
             inline void SetDrawColor(Color color) { SDL_SetRenderDrawColor(mHandle, color.r, color.g, color.b, color.a); }
+            inline void SetClearColor(Color color) 
+            {
+                mClearColor = &color;
+                PGE_LOG(PGELLVL_INFO, "Clear color setted to : %s", mClearColor->AsCStr());
+            }
 
-            void Clear(Color color);
+            void Clear();
             void Submit();
             void Flush();
 
         private:
             SDL_Renderer* mHandle;
+            Color* mClearColor;
         };
     }
 }

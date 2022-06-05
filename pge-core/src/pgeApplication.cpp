@@ -13,14 +13,27 @@ namespace pge
 
     }
 
-    void Application::Init()
+    void Application::_Init()
     {
+        Logger::Init();
+        core::Init();
         mWindow = new graphics::Window();
-        mRenderer = new graphics::Renderer(mWindow->getHandle());
+        mRenderer = new graphics::RendererWrapper(mWindow->getHandle());
+    }
+    
+    void Application::_HandleEvents()
+    {
+        ehandler::Proc(&mEHD, &mIsRunning);
     }
 
     void Application::Run()
     {
-        while(mIsRunning);
+        while(mIsRunning)
+        {
+            _HandleEvents();
+
+            mRenderer->Clear();
+            mRenderer->Flush();
+        }
     }
 }

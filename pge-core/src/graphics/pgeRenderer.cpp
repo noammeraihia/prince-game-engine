@@ -1,10 +1,10 @@
-#include "PGE/graphics/pgeRenderer.h"
+#include "PGE/graphics/pgeRendererWrapper.h"
 
 namespace pge 
 { 
     namespace graphics
     {
-        Renderer::Renderer(SDL_Window* window)
+        RendererWrapper::RendererWrapper(SDL_Window* window)
         {
             mHandle = NULL;
             mHandle = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -16,25 +16,25 @@ namespace pge
             PGE_LOG(PGELLVL_INFO, "Renderer successfuly created");
         }
 
-        Renderer::~Renderer()
+        RendererWrapper::~RendererWrapper()
         {
             SDL_DestroyRenderer(mHandle);
 
             PGE_LOG(PGELLVL_INFO, "Renderer has been destroyed");
         }
 
-        void Renderer::Clear(Color color)
+        void RendererWrapper::Clear()
         {
-            SetDrawColor(color);
+            SetDrawColor(*mClearColor);
             SDL_RenderClear(mHandle);
         }
 
-        void Renderer::Submit()
+        void RendererWrapper::Submit()
         {
             SDL_RenderCopy(mHandle, NULL, NULL, NULL);
         }
 
-        void Renderer::Flush()
+        void RendererWrapper::Flush()
         {
             SDL_RenderPresent(mHandle);
         }

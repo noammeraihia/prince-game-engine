@@ -6,9 +6,7 @@ class Sandbox : public pge::Application
 public:
     Sandbox()
     {
-        pge::Logger::Init();
-        pge::core::Init();
-        Init();
+        _Init();
     }
 
     ~Sandbox()
@@ -18,18 +16,18 @@ public:
 
     void Run()
     {
-        while (mIsRunning)
+        mRenderer->SetClearColor(pge::graphics::Color(255, 21, 45, 255));
+
+        while(mIsRunning)
         {
-            while (SDL_PollEvent(&mEvent))
+            _HandleEvents();
+
+            if (_GetKeyDown(SDL_SCANCODE_E))
             {
-                if (mEvent.type == SDL_QUIT)
-                {
-                    PGE_LOG(pge::PGELLVL_INFO, "Quiting...");
-                    mIsRunning = false;
-                }
+                PGE_LOG(pge::PGELLVL_DEBUG, "E PRESSED !!");
             }
 
-            mRenderer->Clear(pge::graphics::Color(255, 0, 255, 255));
+            mRenderer->Clear();
             mRenderer->Flush();
         }
 

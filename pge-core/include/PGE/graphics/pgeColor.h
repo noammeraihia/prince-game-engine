@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdio>
 #include <SDL2/SDL.h>
 
 namespace pge
@@ -17,6 +18,13 @@ namespace pge
             inline SDL_Color AsSDLColor()
             {
                 return (SDL_Color) { r, g, b, a };
+            };
+
+            inline const char* AsCStr()
+            {
+                char* res = NULL;
+                sprintf(res, "(%d, %d, %d, %d)", r, g, b, a);
+                return res;
             };
 
             uint8_t r, g, b, a;
