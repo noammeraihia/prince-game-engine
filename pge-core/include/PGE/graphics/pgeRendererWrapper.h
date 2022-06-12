@@ -20,7 +20,8 @@ namespace pge
             inline void SetClearColor(Color color) 
             {
                 mClearColor = &color;
-                PGE_LOG(PGELLVL_INFO, "Clear color setted to : %s", mClearColor->AsCStr());
+                // PGE_LOG(PGELLVL_INFO, "Clear color setted to : %s", mClearColor->AsCStr());
+                printf("Clear color setted to : %s\n", mClearColor->AsCStr());
             }
 
             void Clear();

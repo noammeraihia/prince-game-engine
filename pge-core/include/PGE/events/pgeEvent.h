@@ -12,10 +12,16 @@ namespace pge
     {
         struct EHData
         {
+            EHData()
+            {
+                KID.keyStates = SDL_GetKeyboardState(nullptr);
+            }
+
             kinput::KIData KID;
             SDL_Event event;
+
         };
 
-        void Proc(EHData* EHD, bool* isAppRunning);
+        void Handle(EHData* EHD, bool* isAppRunning);
     };
 }

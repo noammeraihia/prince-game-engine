@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <PGE/pge.h>
 
+#include <glm/glm.hpp>
+
 class Sandbox : public pge::Application
 {
 public:
     Sandbox()
     {
         _Init();
+
+        vec = glm::vec<2, int>(56, 4);
     }
 
     ~Sandbox()
@@ -17,6 +21,7 @@ public:
     void Run()
     {
         mRenderer->SetClearColor(pge::graphics::Color(255, 21, 45, 255));
+        PGE_LOG(pge::PGELLVL_INFO, "VEC2 : [%d, %d]", vec.x, 5);
 
         while(mIsRunning)
         {
@@ -35,7 +40,7 @@ public:
     }
 
 private:
-    SDL_Event mEvent;
+    glm::vec<2, int> vec;
 
 };
 

@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <SDL2/SDL.h>
 
+#include "PGE/utils/pgeLogger.h"
+
 namespace pge
 {
     namespace graphics
@@ -15,6 +17,20 @@ namespace pge
             Color(uint32_t ac);
             Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
+            ~Color();
+
+            inline void InitCStrName()
+            {
+                cstrName = NULL;
+                cstrName = (char*)malloc(sizeof(char) * 1024);
+                if (!cstrName)
+                {
+                    PGE_LOG(PGELLVL_ERROR, "\"cstrName\" mem alloc has failed");
+                    return;
+                }
+                sprintf(cstrName, "RGBA(%d, %d, %d, %d)", r, g, b, a);
+            }
+
             inline SDL_Color AsSDLColor()
             {
                 return (SDL_Color) { r, g, b, a };
@@ -22,12 +38,11 @@ namespace pge
 
             inline const char* AsCStr()
             {
-                char* res = NULL;
-                sprintf(res, "(%d, %d, %d, %d)", r, g, b, a);
-                return res;
+                return cstrName;
             };
 
             uint8_t r, g, b, a;
+            char* cstrName;
 
         };
     }

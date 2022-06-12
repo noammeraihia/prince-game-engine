@@ -37,8 +37,10 @@ namespace pge
         char prefix[255];
         sprintf(prefix, "PrinceGE - %s - [%s] : ", dt, sLLvl2LStr.at(lvl));
 
+        char* final = strcat(prefix, fmt);
+
         va_start(arg, fmt);
-        done = vfprintf(stdout, strcat(prefix, fmt), arg);
+        done = vfprintf(stdout, final, arg);
         va_end(arg);
         printf("\n");
 

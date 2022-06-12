@@ -19,11 +19,13 @@ namespace pge
         core::Init();
         mWindow = new graphics::Window();
         mRenderer = new graphics::RendererWrapper(mWindow->getHandle());
+        
+        mEHD = ehandler::EHData();
     }
     
     void Application::_HandleEvents()
     {
-        ehandler::Proc(&mEHD, &mIsRunning);
+        ehandler::Handle(&mEHD, &mIsRunning);
     }
 
     void Application::Run()
