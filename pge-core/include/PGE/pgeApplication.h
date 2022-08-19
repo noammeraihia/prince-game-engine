@@ -5,6 +5,7 @@
 #include "PGE/core/pgeCore.h"
 
 #include "PGE/graphics/pgeWindow.h"
+#include "PGE/graphics/pgeTexture.h"
 #include "PGE/graphics/pgeRendererWrapper.h"
 
 #include "PGE/events/pgeEvent.h"
@@ -25,14 +26,18 @@ namespace pge
             return kinput::__GetKeyDown(&mEHD.KID, sc);
         }
         
+        void _Setup();
+        virtual void Setup();
         virtual void Run();
 
+        void _MainLoop();
 
     protected:
         bool mIsRunning;
 
         graphics::Window* mWindow;
         graphics::RendererWrapper* mRenderer;
+        graphics::TextureManager* mTexMan;
 
         ehandler::EHData mEHD;
     };

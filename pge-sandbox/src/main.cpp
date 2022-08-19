@@ -9,8 +9,6 @@ public:
     Sandbox()
     {
         _Init();
-
-        vec = glm::vec<2, int>(56, 4);
     }
 
     ~Sandbox()
@@ -18,29 +16,27 @@ public:
         delete mWindow;
     }
 
+    void Setup()
+    {
+        mRenderer->SetClearColor(pge::graphics::Color(255, 255, 255, 255));
+        whiteTexture = new pge::graphics::Texture(pge::graphics::Color(0, 255, 0, 255), "res/gfx/test_bmp/test_texture.bmp", 32, 32, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET);
+        mTexMan->CreateTexture(mRenderer->getHandle(), whiteTexture);
+    }
+
     void Run()
     {
-        mRenderer->SetClearColor(pge::graphics::Color(255, 21, 45, 255));
-        PGE_LOG(pge::PGELLVL_INFO, "VEC2 : [%d, %d]", vec.x, 5);
-
-        while(mIsRunning)
+        if (_GetKeyDown(SDL_SCANCODE_E))
         {
-            _HandleEvents();
-
-            if (_GetKeyDown(SDL_SCANCODE_E))
-            {
-                PGE_LOG(pge::PGELLVL_DEBUG, "E PRESSED !!");
-            }
-
-            mRenderer->Clear();
-            mRenderer->Flush();
+            PGE_LOG(pge::PGELLVL_DEBUG, "E PRESSED !!");
         }
 
-        SDL_Quit();
+        mRenderer->ClearScreen();
+        mRenderer->Submit(whiteTexture, glm::vec4(0, 0, 32, 32), glm::vec4(100, 100, 64, 64));
+        mRenderer->Flush();
     }
 
 private:
-    glm::vec<2, int> vec;
+    pge::graphics::Texture* whiteTexture;
 
 };
 

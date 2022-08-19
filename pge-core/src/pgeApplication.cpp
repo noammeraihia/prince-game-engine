@@ -19,6 +19,7 @@ namespace pge
         core::Init();
         mWindow = new graphics::Window();
         mRenderer = new graphics::RendererWrapper(mWindow->getHandle());
+        mTexMan = new graphics::TextureManager();
         
         mEHD = ehandler::EHData();
     }
@@ -28,14 +29,32 @@ namespace pge
         ehandler::Handle(&mEHD, &mIsRunning);
     }
 
+    void Application::_Setup()
+    {
+        PGE_LOG(pge::PGELLVL_INFO, "App setup started...");
+        Setup();
+        PGE_LOG(pge::PGELLVL_INFO, "App setup finished...");
+    }
+
+    void Application::Setup()
+    {
+        mRenderer->SetClearColor(pge::graphics::Color(50, 50, 50, 255));
+    }
+
     void Application::Run()
     {
-        while(mIsRunning)
+        mRenderer->Clear();
+        mRenderer->Flush();
+    }
+
+    void Application::_MainLoop()
+    {
+        _Setup();
+        while (mIsRunning)
         {
             _HandleEvents();
-
-            mRenderer->Clear();
-            mRenderer->Flush();
+            Run();
         }
+        SDL_Quit();
     }
 }

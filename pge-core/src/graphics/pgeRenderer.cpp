@@ -23,15 +23,17 @@ namespace pge
             PGE_LOG(PGELLVL_INFO, "Renderer has been destroyed");
         }
 
-        void RendererWrapper::Clear()
+        void RendererWrapper::ClearScreen()
         {
-            SetDrawColor(*mClearColor);
-            SDL_RenderClear(mHandle);
+            SetDrawColor(mClearColor);
+            Clear();
         }
 
-        void RendererWrapper::Submit()
+        void RendererWrapper::Submit(Texture* tex, glm::vec4 src, glm::vec4 dst)
         {
-            SDL_RenderCopy(mHandle, NULL, NULL, NULL);
+            SDL_Rect _src = {src.x, src.y, src.z, src.w};
+            SDL_Rect _dst = {dst.x, dst.y, dst.z, dst.w};
+            SDL_RenderCopy(mHandle, tex->handle, &_src, &_dst);
         }
 
         void RendererWrapper::Flush()
