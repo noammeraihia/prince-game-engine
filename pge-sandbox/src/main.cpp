@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include <PGE/ecs/pgeEcs.h>
+
 class Sandbox : public pge::Application
 {
 public:
