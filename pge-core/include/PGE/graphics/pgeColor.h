@@ -21,13 +21,6 @@ namespace pge
 
             inline void InitCStrName()
             {
-                cstrName = NULL;
-                cstrName = (char*)malloc(sizeof(char) * 1024);
-                if (!cstrName)
-                {
-                    PGE_LOG(PGELLVL_ERROR, "\"cstrName\" mem alloc has failed");
-                    return;
-                }
                 sprintf(cstrName, "RGBA(%d, %d, %d, %d)", r, g, b, a);
             }
 
@@ -42,7 +35,7 @@ namespace pge
             };
 
             uint8_t r, g, b, a;
-            char* cstrName;
+            char cstrName[25];
 
         };
     }

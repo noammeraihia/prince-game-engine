@@ -4,6 +4,11 @@ namespace pge
 { 
     namespace graphics
     {
+        RendererWrapper::RendererWrapper()
+        {
+            
+        }
+
         RendererWrapper::RendererWrapper(SDL_Window* window)
         {
             mHandle = NULL;
@@ -31,8 +36,9 @@ namespace pge
 
         void RendererWrapper::Submit(Texture* tex, glm::vec4 src, glm::vec4 dst)
         {
-            SDL_Rect _src = {src.x, src.y, src.z, src.w};
-            SDL_Rect _dst = {dst.x, dst.y, dst.z, dst.w};
+            SDL_Rect _src = {(int)src.x, (int)src.y, (int)src.z, (int)src.w};
+            SDL_Rect _dst = {(int)dst.x, (int)dst.y, (int)dst.z, (int)dst.w};
+
             SDL_RenderCopy(mHandle, tex->handle, &_src, &_dst);
         }
 

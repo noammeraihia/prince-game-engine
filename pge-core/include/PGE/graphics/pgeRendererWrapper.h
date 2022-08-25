@@ -14,9 +14,10 @@ namespace pge
     {
         struct Texture;
 
-        class RendererWrapper
+        class   RendererWrapper
         {
         public:
+            RendererWrapper();
             RendererWrapper(SDL_Window* window);
             ~RendererWrapper();
 

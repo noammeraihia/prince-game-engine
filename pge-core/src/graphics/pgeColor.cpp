@@ -17,7 +17,8 @@ namespace pge
 
         Color::~Color()
         {
-            free(cstrName);
+            // if (cstrName != NULL)
+            //     free(cstrName);
         }
     }
 }

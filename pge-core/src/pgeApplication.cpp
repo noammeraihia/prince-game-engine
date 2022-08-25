@@ -3,37 +3,31 @@
 namespace pge 
 {
     Application::Application()
-        :mIsRunning(true)
     {
+        mIsRunning = true;
 
-    }
-
-    Application::~Application()
-    {
-
-    }
-
-    void Application::_Init()
-    {
         Logger::Init();
         core::Init();
         mWindow = new graphics::Window();
         mRenderer = new graphics::RendererWrapper(mWindow->getHandle());
         mTexMan = new graphics::TextureManager();
-        
         mEHD = ehandler::EHData();
+    }
+
+    Application::~Application()
+    {
+    }
+
+    void Application::_Destroy()
+    {
+        delete mWindow;
+        delete mRenderer;
+        delete mTexMan;
     }
     
     void Application::_HandleEvents()
     {
         ehandler::Handle(&mEHD, &mIsRunning);
-    }
-
-    void Application::_Setup()
-    {
-        PGE_LOG(pge::PGELLVL_INFO, "App setup started...");
-        Setup();
-        PGE_LOG(pge::PGELLVL_INFO, "App setup finished...");
     }
 
     void Application::Setup()
@@ -43,17 +37,18 @@ namespace pge
 
     void Application::Run()
     {
-        mRenderer->Clear();
-        mRenderer->Flush();
+        
     }
 
     void Application::_MainLoop()
     {
-        _Setup();
+        Setup();
         while (mIsRunning)
         {
             _HandleEvents();
+            mRenderer->ClearScreen();
             Run();
+            mRenderer->Flush();
         }
         SDL_Quit();
     }

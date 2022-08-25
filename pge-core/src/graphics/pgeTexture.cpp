@@ -6,11 +6,17 @@ namespace pge
     {
         TextureManager::TextureManager() 
         {
-
+            PGE_LOG(PGELLVL_INFO, "Texture Manager successfuly created");
         }
         TextureManager::~TextureManager()
         {
+            for (auto tex : allTexturesHandle)
+            {
+                SDL_DestroyTexture(tex->handle);
+                delete tex;
+            }
 
+            PGE_LOG(PGELLVL_INFO, "Texture Manager has been destroyed");
         }
 
         void TextureManager::CreateTexture(SDL_Renderer* renderer, Texture* tex)
@@ -28,6 +34,13 @@ namespace pge
             }
             
             tex->handle = SDL_CreateTextureFromSurface(renderer, tex->srcImg);
+
+            allTexturesHandle.emplace_back(tex);
+        }
+
+        Texture::Texture() 
+        {
+            
         }
 
         Texture::Texture(Color color, const char* srcImgPath, int w, int h, uint32_t format, int access) 

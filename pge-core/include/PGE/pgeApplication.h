@@ -10,6 +10,8 @@
 
 #include "PGE/events/pgeEvent.h"
 
+#include "PGE/ecs/pgeEcs.h"
+
 namespace pge
 {
     class Application
@@ -18,7 +20,8 @@ namespace pge
         Application();
         virtual ~Application();
 
-        void _Init();
+        void _Setup();
+        void _Destroy();
         void _HandleEvents();
 
         inline bool _GetKeyDown(SDL_Scancode sc)
@@ -26,7 +29,6 @@ namespace pge
             return kinput::__GetKeyDown(&mEHD.KID, sc);
         }
         
-        void _Setup();
         virtual void Setup();
         virtual void Run();
 

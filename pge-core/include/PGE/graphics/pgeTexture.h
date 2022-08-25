@@ -5,12 +5,15 @@
 #include <PGE/utils/pgeLogger.h>
 #include "PGE/graphics/pgeColor.h"
 
+#include <vector>
+
 namespace pge
 {
     namespace graphics
     {
         struct Texture
         {
+            Texture();
             Texture(Color color, const char* srcImgPath, int w, int h, uint32_t format, int access);
 
             SDL_Texture* handle;
@@ -30,6 +33,7 @@ namespace pge
             void CreateTexture(SDL_Renderer* renderer, Texture* tex);
 
         private:
+            std::vector<Texture*> allTexturesHandle;
 
         };
 
