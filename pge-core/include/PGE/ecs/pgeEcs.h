@@ -127,6 +127,89 @@ namespace pge
             size_t mSize;
         };
 
+        class ComponentManager
+        {
+        public:
+            ComponentManager();
+            ~ComponentManager();
+
+            template<typename T>
+            uint16_t RegisterComponent()
+            {
+                const char* typeName = typeid(T).name();
+
+                if (mComponentTypes.find(typeName) == mComponentTypes.end())
+                {
+                    PGE_LOG(PGELLVL_ERROR, "Registering component type more than once");
+
+                    return PGE_ECS_ERRCODE;
+                }
+        
+                mComponentTypes.insert({typeName, mNextComponentType});
+                mComponentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
+
+                ++mNextComponentType;
+
+                return PGE_ECS_SUCCESSCODE;
+            }
+
+            template<typename T>
+            ComponentType GetComponentType()
+            {
+                const char* typeName = typeid(T).name();
+
+                if (mComponentTypes.find(typeName) == mComponentTypes.end())
+                {
+                    PGE_LOG(PGELLVL_ERROR, "Component not registered before use");
+
+                    return PGE_ECS_ERRCODE;
+                }
+
+                return mComponentTypes[typeName];
+            }
+
+            template<typename T>
+            void AddComponent(EntityID entity, T component)
+            {
+                GetComponentArray<T>()->InsertData(entity, component);
+            }
+
+            template<typename T>
+            void RemoveComponent(EntityID entity)
+            {
+                GetComponentArray<T>()->RemoveData(entity);
+            }
+
+            template<typename T>
+            T& GetComponent(EntityID entity)
+            {
+                return GetComponentArray<T>()->GetData(entity);
+            }
+
+            void EntityDestroyed(EntityID entity);
+
+        private:
+            std::unordered_map<const char*, ComponentType> mComponentTypes{};
+            std::unordered_map<const char*, std::shared_ptr<IComponentArray>> mComponentArrays{};
+
+            ComponentType mNextComponentType{};
+
+            template<typename T>
+            std::shared_ptr<ComponentArray<T>> GetComponentArray()
+            {
+                const char* typeName = typeid(T).name();
+
+                if (mComponentTypes.find(typeName) != mComponentTypes.end())
+                {
+                    PGE_LOG(PGELLVL_ERROR, "Component not registered before use");
+
+                    return PGE_ECS_ERRCODE;
+                }
+
+                return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
+            }
+        };
+
         class System
         {
         public:
@@ -175,38 +258,87 @@ namespace pge
                 return PGE_ECS_SUCCESSCODE;
             }
 
-            void EntityDestroyed(EntityID entity)
-            {
-                for (auto const& pair : mSystems)
-                {
-                    auto const& system = pair.second;
-
-                    system->mEntities.erase(entity);
-                }
-            }
-
-            void EntitySignatureChanged(EntityID entity, Signature signature)
-            {
-                for (auto const& pair : mSystems)
-                {
-                    auto const& type = pair.first;
-                    auto const& system = pair.second;
-                    auto const& systemSignature = mSignatures[type];
-
-                    if ((signature & systemSignature) == systemSignature)
-                    {
-                        system->mEntities.insert(entity);
-                    }
-                    else
-                    {
-                        system->mEntities.erase(entity);
-                    }
-                }
-            }
+            void EntityDestroyed(EntityID entity);
+            void EntitySignatureChanged(EntityID entity, Signature signature);
 
         private:
             std::unordered_map<const char*, Signature> mSignatures{};
             std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
+
+        };
+
+        class ECSCoordinator
+        {
+        public:
+            ECSCoordinator();
+            ~ECSCoordinator();
+
+            EntityID CreateEntity();
+            void DestroyEntity(EntityID entity);
+
+
+            // Component methods
+            template<typename T>
+            void RegisterComponent()
+            {
+                mComponentManager->RegisterComponent<T>();
+            }
+
+            template<typename T>
+            void AddComponent(EntityID entity, T component)
+            {
+                mComponentManager->AddComponent<T>(entity, component);
+
+                auto signature = mEntityManager->GetSignature(entity);
+                signature.set(mComponentManager->GetComponentType<T>(), true);
+                mEntityManager->SetSignature(entity, signature);
+
+                mSystemManager->EntitySignatureChanged(entity, signature);
+            }
+
+            template<typename T>
+            void RemoveComponent(EntityID entity)
+            {
+                mComponentManager->RemoveComponent<T>(entity);
+
+                auto signature = mEntityManager->GetSignature(entity);
+                signature.set(mComponentManager->GetComponentType<T>(), false);
+                mEntityManager->SetSignature(entity, signature);
+
+                mSystemManager->EntitySignatureChanged(entity, signature);
+            }
+
+            template<typename T>
+            T& GetComponent(EntityID entity)
+            {
+                return mComponentManager->GetComponent<T>(entity);
+            }
+
+            template<typename T>
+            ComponentType GetComponentType()
+            {
+                return mComponentManager->GetComponentType<T>();
+            }
+
+
+            // System methods
+            template<typename T>
+            std::shared_ptr<T> RegisterSystem()
+            {
+                return mSystemManager->RegisterSystem<T>();
+            }
+
+            template<typename T>
+            void SetSystemSignature(Signature signature)
+            {
+                mSystemManager->SetSignature<T>(signature);
+            }
+
+
+        private:
+            std::unique_ptr<ComponentManager> mComponentManager;
+            std::unique_ptr<EntityManager> mEntityManager;
+	        std::unique_ptr<SystemManager> mSystemManager;
 
         };
     }
