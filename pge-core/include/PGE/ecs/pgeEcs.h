@@ -1,10 +1,13 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <bitset>
 #include <queue>
 #include <array>
 #include <unordered_map>
+#include <set>
+#include <typeinfo> 
 
 #include "PGE/utils/pgeLogger.h"
 
@@ -23,7 +26,7 @@ namespace pge
         using ComponentType = uint8_t;
         const uint8_t MAX_COMPONENTS = 32;
 
-        using EntitySignature = std::bitset<MAX_COMPONENTS>;
+        using Signature = std::bitset<MAX_COMPONENTS>;
 
         class EntityManager
         {
@@ -33,12 +36,12 @@ namespace pge
 
             EntityID CreateEntity();
             uint16_t DestroyEntity(EntityID entity);
-            uint16_t SetSignature(EntityID entity, EntitySignature signature);
-            EntitySignature GetSignature(EntityID entity);
+            uint16_t SetSignature(EntityID entity, Signature signature);
+            Signature GetSignature(EntityID entity);
 
         private:
             std::queue<EntityID> mAvailableEntities{};
-            std::array<EntitySignature, MAX_ENTITIES> mSignatures{};
+            std::array<Signature, MAX_ENTITIES> mSignatures{};
 
             uint32_t mLivingEntityCount{};
         };
@@ -122,6 +125,89 @@ namespace pge
             std::unordered_map<size_t, EntityID> mIndexToEntity;
 
             size_t mSize;
+        };
+
+        class System
+        {
+        public:
+            std::set<EntityID> mEntities;
+
+        };
+
+        class SystemManager
+        {
+        public:
+            SystemManager();
+            ~SystemManager();
+
+            template<typename T>
+            std::shared_ptr<T> RegisterSystem()
+            {
+                const char* typeName = typeid(T).name();
+
+                if (mSystems.find(typeName) != mSystems.end())
+                {
+                    PGE_LOG(PGELLVL_ERROR, "Registering system more than once.");
+                    std::shared_ptr<T> errSys = NULL;
+                    return errSys;
+                }
+
+                auto system = std::make_shared<T>();
+                mSystems.insert({typeName, system});
+
+                return system;
+            }
+
+            template<typename T>
+            uint16_t SetSignature(Signature signature)
+            {
+                const char* typeName = typeid(T).name();
+
+                if (mSystems.find(typeName) == mSystems.end())
+                {
+                    PGE_LOG(PGELLVL_ERROR, "System used before registered.");
+
+                    return PGE_ECS_ERRCODE;
+                }
+
+                mSignatures.insert({typeName, signature});
+
+                return PGE_ECS_SUCCESSCODE;
+            }
+
+            void EntityDestroyed(EntityID entity)
+            {
+                for (auto const& pair : mSystems)
+                {
+                    auto const& system = pair.second;
+
+                    system->mEntities.erase(entity);
+                }
+            }
+
+            void EntitySignatureChanged(EntityID entity, Signature signature)
+            {
+                for (auto const& pair : mSystems)
+                {
+                    auto const& type = pair.first;
+                    auto const& system = pair.second;
+                    auto const& systemSignature = mSignatures[type];
+
+                    if ((signature & systemSignature) == systemSignature)
+                    {
+                        system->mEntities.insert(entity);
+                    }
+                    else
+                    {
+                        system->mEntities.erase(entity);
+                    }
+                }
+            }
+
+        private:
+            std::unordered_map<const char*, Signature> mSignatures{};
+            std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
+
         };
     }
 }

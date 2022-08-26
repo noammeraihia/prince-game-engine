@@ -46,7 +46,7 @@ namespace pge
             return PGE_ECS_SUCCESSCODE;
         }
 
-        uint16_t EntityManager::SetSignature(EntityID entity, EntitySignature signature)
+        uint16_t EntityManager::SetSignature(EntityID entity, Signature signature)
         {
             if (entity > MAX_ENTITIES)
             {
@@ -59,12 +59,12 @@ namespace pge
             return PGE_ECS_SUCCESSCODE;
         }
 
-        EntitySignature EntityManager::GetSignature(EntityID entity)
+        Signature EntityManager::GetSignature(EntityID entity)
         {
             if (entity > MAX_ENTITIES)
             {
                 PGE_LOG(PGELLVL_ERROR, "Entity (id: %d) is out of range (max: %d)", entity, MAX_ENTITIES);
-                EntitySignature errSign = PGE_ECS_ERRCODE;
+                Signature errSign = PGE_ECS_ERRCODE;
                 return errSign;
             }
 
