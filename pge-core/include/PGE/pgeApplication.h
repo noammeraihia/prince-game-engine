@@ -24,6 +24,8 @@ namespace pge
         void _Destroy();
         void _HandleEvents();
 
+        void _InitECS();
+
         inline bool _GetKeyDown(SDL_Scancode sc)
         {
             return kinput::__GetKeyDown(&mEHD.KID, sc);
@@ -40,6 +42,7 @@ namespace pge
         graphics::Window* mWindow;
         graphics::RendererWrapper* mRenderer;
         graphics::TextureManager* mTexMan;
+        ecs::ECSCoordinator* mECS;
 
         ehandler::EHData mEHD;
     };

@@ -41,3 +41,32 @@
 
 //     };
 // }
+
+#pragma once
+
+#include "PGE/utils/pgeLogger.h"
+#include "PGE/graphics/pgeTexture.h"
+
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+
+namespace pge
+{
+    namespace ecs
+    {
+        struct SpriteCMP
+        {
+            // SpriteCMP(graphics::Texture* _texture, glm::vec2 framePos, glm::vec2 frameSize)
+            // {
+            //     texture = _texture;
+            //     currentFramePosition = framePos;
+            //     currentFrameSize = frameSize;
+            // }
+
+            graphics::Texture* texture;
+            glm::vec2 currentFramePosition;
+            glm::vec2 currentFrameSize;
+
+        };
+    }
+}

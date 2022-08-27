@@ -6,27 +6,54 @@
 // #include <glm/glm.hpp>
 // #include <glm/ext.hpp>
 
-// #include "PGE/components/pgePosition.h"
-
 // namespace pge
 // {
-//     class TransformCMP : public ecs::Component
+//     class PositionCMP : public ecs::Component
 //     {
 //     public:
-//         TransformCMP();
-//         ~TransformCMP();
+//         PositionCMP(int x, int y);
+//         ~PositionCMP();
 
-//         void Init() override;
-//         void Update() override;
+//         inline glm::vec2 getPos() { return mPosition; }
 
-//         inline glm::vec3 getTransform() { return mTransform; }
-//         void setTransformX(float transX);
-//         void setTransformY(float transX);
-//         void setTransformRot(float transRot);
-        
+//         inline float getX() { return mPosition.x; }
+//         inline float getY() { return mPosition.y; }
+//         inline float getRot() { return mRotation; }
+
+//         inline void setPos(glm::vec2 pos) { mPosition = pos; }
+//         inline void setRot(float rot) { mRotation = rot; }
+
 //     private:
-//         PositionCMP& mParentPosition = pParent->getCmp<PositionCMP>();
-//         glm::vec3 mTransform;
+//         glm::vec2 mPosition;
+//         float mRotation;
         
 //     };
 // }
+
+#pragma once
+
+#include "PGE/utils/pgeLogger.h"
+#include "PGE/ecs/pgeEcs.h"
+
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+
+namespace pge
+{
+    namespace ecs
+    {
+        struct TransformCMP
+        {
+            // TransformCMP(glm::vec2 pos, float rot, glm::vec2 _scale)
+            // {
+            //     position = pos;
+            //     rotation = rot;
+            //     scale = _scale;
+            // }
+
+            glm::vec2 position;
+            glm::vec2 scale;
+            float rotation;
+        };
+    }
+}

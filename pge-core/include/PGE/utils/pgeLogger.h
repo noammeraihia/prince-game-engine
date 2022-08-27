@@ -8,7 +8,6 @@
 #include <iostream>
 #include <map>
 
-
 namespace pge
 {
     enum LogLevel 

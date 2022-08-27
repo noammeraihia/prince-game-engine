@@ -15,13 +15,8 @@ namespace pge
 {
     namespace ecs
     {
-
-
         using EntityID = uint32_t;
         const uint16_t MAX_ENTITIES = 1024;
-
-#define PGE_ECS_ERRCODE 4056
-#define PGE_ECS_SUCCESSCODE PGE_ECS_ERRCODE * 2
 
         using ComponentType = uint8_t;
         const uint8_t MAX_COMPONENTS = 32;
@@ -35,8 +30,8 @@ namespace pge
             ~EntityManager();
 
             EntityID CreateEntity();
-            uint16_t DestroyEntity(EntityID entity);
-            uint16_t SetSignature(EntityID entity, Signature signature);
+            void DestroyEntity(EntityID entity);
+            void SetSignature(EntityID entity, Signature signature);
             Signature GetSignature(EntityID entity);
 
         private:
@@ -57,12 +52,12 @@ namespace pge
         class ComponentArray : public IComponentArray
         {
         public:
-            uint16_t InsertData(EntityID entity, T component)
+            void InsertData(EntityID entity, T component)
             {
                 if (mEntityToIndex.find(entity) != mEntityToIndex.end())
                 {
                     PGE_LOG(PGELLVL_ERROR, "Component added to same entity (id: %d) more than once", entity);
-                    return PGE_ECS_ERRCODE;
+                    return;
                 }
 
                 size_t newIndex = mSize;
@@ -70,16 +65,14 @@ namespace pge
                 mIndexToEntity[newIndex] = entity;
                 mComponentArray[newIndex] = component;
                 ++mSize;
-
-                return PGE_ECS_SUCCESSCODE;
             }
 
-            uint16_t RemoveData(EntityID entity)
+            void RemoveData(EntityID entity)
             {
                 if (mEntityToIndex.find(entity) == mEntityToIndex.end())
                 {
                     PGE_LOG(PGELLVL_ERROR, "Removing non-existent component");
-                    return PGE_ECS_ERRCODE;
+                    return;
                 }
 
                 size_t indexOfRemovedEntity = mEntityToIndex[entity];
@@ -95,7 +88,7 @@ namespace pge
 
                 --mSize;
 
-                return PGE_ECS_SUCCESSCODE;
+                return;
             }
 
             T& GetData(EntityID entity)
@@ -119,10 +112,10 @@ namespace pge
             }
 
         private:
-            std::array<T, MAX_ENTITIES> mComponentArray;
+            std::array<T, MAX_ENTITIES> mComponentArray{};
 
-            std::unordered_map<EntityID, size_t> mEntityToIndex;
-            std::unordered_map<size_t, EntityID> mIndexToEntity;
+            std::unordered_map<EntityID, size_t> mEntityToIndex{};
+            std::unordered_map<size_t, EntityID> mIndexToEntity{};
 
             size_t mSize;
         };
@@ -134,15 +127,15 @@ namespace pge
             ~ComponentManager();
 
             template<typename T>
-            uint16_t RegisterComponent()
+            void RegisterComponent()
             {
                 const char* typeName = typeid(T).name();
 
-                if (mComponentTypes.find(typeName) == mComponentTypes.end())
+                if (mComponentTypes.find(typeName) != mComponentTypes.end())
                 {
                     PGE_LOG(PGELLVL_ERROR, "Registering component type more than once");
 
-                    return PGE_ECS_ERRCODE;
+                    return;
                 }
         
                 mComponentTypes.insert({typeName, mNextComponentType});
@@ -150,7 +143,7 @@ namespace pge
 
                 ++mNextComponentType;
 
-                return PGE_ECS_SUCCESSCODE;
+                return;
             }
 
             template<typename T>
@@ -160,9 +153,7 @@ namespace pge
 
                 if (mComponentTypes.find(typeName) == mComponentTypes.end())
                 {
-                    PGE_LOG(PGELLVL_ERROR, "Component not registered before use");
-
-                    return PGE_ECS_ERRCODE;
+                    PGE_LOG(PGELLVL_ERROR, "(fn -> GetComponentType) Component not registered before use");
                 }
 
                 return mComponentTypes[typeName];
@@ -199,11 +190,9 @@ namespace pge
             {
                 const char* typeName = typeid(T).name();
 
-                if (mComponentTypes.find(typeName) != mComponentTypes.end())
+                if (mComponentTypes.find(typeName) == mComponentTypes.end())
                 {
-                    PGE_LOG(PGELLVL_ERROR, "Component not registered before use");
-
-                    return PGE_ECS_ERRCODE;
+                    PGE_LOG(PGELLVL_ERROR, "(fn -> GetComponentArray) Component not registered before use");;
                 }
 
                 return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
@@ -223,8 +212,8 @@ namespace pge
             SystemManager();
             ~SystemManager();
 
-            template<typename T>
-            std::shared_ptr<T> RegisterSystem()
+            template<typename T, typename... TArgs>
+            std::shared_ptr<T> RegisterSystem(TArgs&&... mArgs)
             {
                 const char* typeName = typeid(T).name();
 
@@ -235,14 +224,14 @@ namespace pge
                     return errSys;
                 }
 
-                auto system = std::make_shared<T>();
+                auto system = std::make_shared<T>(std::forward<TArgs>(mArgs)...);
                 mSystems.insert({typeName, system});
 
                 return system;
             }
 
             template<typename T>
-            uint16_t SetSignature(Signature signature)
+            void SetSignature(Signature signature)
             {
                 const char* typeName = typeid(T).name();
 
@@ -250,12 +239,12 @@ namespace pge
                 {
                     PGE_LOG(PGELLVL_ERROR, "System used before registered.");
 
-                    return PGE_ECS_ERRCODE;
+                    return;
                 }
 
                 mSignatures.insert({typeName, signature});
 
-                return PGE_ECS_SUCCESSCODE;
+                return;
             }
 
             void EntityDestroyed(EntityID entity);
@@ -322,10 +311,10 @@ namespace pge
 
 
             // System methods
-            template<typename T>
-            std::shared_ptr<T> RegisterSystem()
+            template<typename T, typename... TArgs>
+            std::shared_ptr<T> RegisterSystem(TArgs&&... mArgs)
             {
-                return mSystemManager->RegisterSystem<T>();
+                return mSystemManager->RegisterSystem<T>(std::forward<TArgs>(mArgs)...);
             }
 
             template<typename T>

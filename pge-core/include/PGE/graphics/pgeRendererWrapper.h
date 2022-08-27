@@ -14,7 +14,7 @@ namespace pge
     {
         struct Texture;
 
-        class   RendererWrapper
+        class RendererWrapper
         {
         public:
             RendererWrapper();

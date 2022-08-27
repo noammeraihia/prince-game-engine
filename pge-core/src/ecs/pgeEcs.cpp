@@ -20,7 +20,7 @@ namespace pge
             if (mLivingEntityCount > MAX_ENTITIES)
             {
                 PGE_LOG(PGELLVL_ERROR, "Too many living entities -> %d (max: %d)", mLivingEntityCount, MAX_ENTITIES);
-                return PGE_ECS_ERRCODE;
+                return 6000;
             }
 
             EntityID e = mAvailableEntities.front();
@@ -30,12 +30,12 @@ namespace pge
             return e;
         }
 
-        uint16_t EntityManager::DestroyEntity(EntityID entity)
+        void EntityManager::DestroyEntity(EntityID entity)
         {
             if (entity > MAX_ENTITIES)
             {
                 PGE_LOG(PGELLVL_ERROR, "Entity (id: %d) is out of range (max: %d)", entity, MAX_ENTITIES);
-                return PGE_ECS_ERRCODE;
+                return;
             }
 
             mSignatures[entity].reset();
@@ -43,20 +43,20 @@ namespace pge
             mAvailableEntities.push(entity);
             --mLivingEntityCount;
 
-            return PGE_ECS_SUCCESSCODE;
+            return;
         }
 
-        uint16_t EntityManager::SetSignature(EntityID entity, Signature signature)
+        void EntityManager::SetSignature(EntityID entity, Signature signature)
         {
             if (entity > MAX_ENTITIES)
             {
                 PGE_LOG(PGELLVL_ERROR, "Entity (id: %d) is out of range (max: %d)", entity, MAX_ENTITIES);
-                return PGE_ECS_ERRCODE;
+                return;
             }
 
             mSignatures[entity] = signature;
 
-            return PGE_ECS_SUCCESSCODE;
+            return;
         }
 
         Signature EntityManager::GetSignature(EntityID entity)
@@ -64,11 +64,21 @@ namespace pge
             if (entity > MAX_ENTITIES)
             {
                 PGE_LOG(PGELLVL_ERROR, "Entity (id: %d) is out of range (max: %d)", entity, MAX_ENTITIES);
-                Signature errSign = PGE_ECS_ERRCODE;
+                Signature errSign = 4056;
                 return errSign;
             }
 
             return mSignatures[entity];
+        }
+
+        ComponentManager::ComponentManager()
+        {
+
+        }
+
+        ComponentManager::~ComponentManager()
+        {
+
         }
 
         void ComponentManager::EntityDestroyed(EntityID entity)

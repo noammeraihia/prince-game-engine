@@ -11,18 +11,21 @@ namespace pge
         mWindow = new graphics::Window();
         mRenderer = new graphics::RendererWrapper(mWindow->getHandle());
         mTexMan = new graphics::TextureManager();
+        mECS = new ecs::ECSCoordinator();
         mEHD = ehandler::EHData();
     }
 
     Application::~Application()
     {
+        
     }
 
     void Application::_Destroy()
     {
-        delete mWindow;
-        delete mRenderer;
+        delete mECS;
         delete mTexMan;
+        delete mRenderer;
+        delete mWindow;
     }
     
     void Application::_HandleEvents()

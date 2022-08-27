@@ -14,5 +14,6 @@
 
 #include "PGE/ecs/pgeEcs.h"
 #include "PGE/components/components.h"
+#include "PGE/systems/pgeSystems.h"
 
 #include "PGE/utils/pgeLogger.h"
