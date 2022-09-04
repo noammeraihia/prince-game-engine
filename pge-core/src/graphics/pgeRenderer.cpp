@@ -12,7 +12,7 @@ namespace pge
         RendererWrapper::RendererWrapper(SDL_Window* window)
         {
             mHandle = NULL;
-            mHandle = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+            mHandle = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
             if (mHandle == NULL)
             {
                 PGE_LOG(PGELLVL_ERROR, "Failed to create renderer");
@@ -34,12 +34,20 @@ namespace pge
             Clear();
         }
 
-        void RendererWrapper::Submit(Texture* tex, glm::vec4 src, glm::vec4 dst)
+        void RendererWrapper::Submit(Texture* tex, glm::vec4 src, glm::vec4 dst, float rotation)
         {
             SDL_Rect _src = {(int)src.x, (int)src.y, (int)src.z, (int)src.w};
             SDL_Rect _dst = {(int)dst.x, (int)dst.y, (int)dst.z, (int)dst.w};
 
-            SDL_RenderCopy(mHandle, tex->handle, &_src, &_dst);
+            SetDrawColor(tex->color);
+            SDL_RenderCopyEx(mHandle,
+                   tex->handle,
+                   &_src,
+                   &_dst,
+                   rotation,
+                   NULL,
+                   tex->flip);
+
         }
 
         void RendererWrapper::Flush()

@@ -14,14 +14,13 @@ namespace pge
         struct Texture
         {
             Texture();
-            Texture(Color color, const char* srcImgPath, int w, int h, uint32_t format, int access);
+            Texture(Color color, const char* srcImgPath, int w, int h, SDL_RendererFlip flip);
 
             SDL_Texture* handle;
             Color color;
             SDL_Surface* srcImg;
             int width, height;
-            uint32_t format;
-            int access;
+            SDL_RendererFlip flip;
         };
         
         class TextureManager

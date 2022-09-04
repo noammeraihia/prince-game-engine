@@ -48,7 +48,18 @@ namespace pge
         Setup();
         while (mIsRunning)
         {
-            _HandleEvents();
+            float tsNewTime = getTime();
+            mTimeStep.deltaTime = tsNewTime - mTimeStep.currentTime;
+
+            mTimeStep.currentTime = tsNewTime;
+            mTimeStep.accumulator += mTimeStep.deltaTime;
+
+            while (mTimeStep.accumulator >= mTimeStep.timeStep)
+            {
+                _HandleEvents();
+                mTimeStep.accumulator -= mTimeStep.timeStep;
+            }
+
             mRenderer->ClearScreen();
             Run();
             mRenderer->Flush();

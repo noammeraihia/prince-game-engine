@@ -4,6 +4,8 @@
 
 #include "PGE/core/pgeCore.h"
 
+#include "PGE/utils/pgeTime.h"
+
 #include "PGE/graphics/pgeWindow.h"
 #include "PGE/graphics/pgeTexture.h"
 #include "PGE/graphics/pgeRendererWrapper.h"
@@ -30,6 +32,11 @@ namespace pge
         {
             return kinput::__GetKeyDown(&mEHD.KID, sc);
         }
+
+        inline float _GetDT()
+        {
+            return mTimeStep.deltaTime;
+        }
         
         virtual void Setup();
         virtual void Run();
@@ -38,6 +45,7 @@ namespace pge
 
     protected:
         bool mIsRunning;
+        TSData mTimeStep;
 
         graphics::Window* mWindow;
         graphics::RendererWrapper* mRenderer;

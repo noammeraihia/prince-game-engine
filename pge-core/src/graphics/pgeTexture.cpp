@@ -20,19 +20,7 @@ namespace pge
         }
 
         void TextureManager::CreateTexture(SDL_Renderer* renderer, Texture* tex)
-        {
-            if (!tex->srcImg)
-            {
-                tex->handle = SDL_CreateTexture(renderer, tex->format, tex->access, tex->width, tex->height);
-
-                SDL_SetRenderTarget(renderer, tex->handle);
-                SDL_SetRenderDrawColor(renderer, tex->color.r, tex->color.g, tex->color.b, tex->color.a);
-                SDL_RenderClear(renderer);
-                SDL_SetRenderTarget(renderer, nullptr);
-
-                return;
-            }
-            
+        {    
             tex->handle = SDL_CreateTextureFromSurface(renderer, tex->srcImg);
 
             allTexturesHandle.emplace_back(tex);
@@ -43,11 +31,13 @@ namespace pge
             
         }
 
-        Texture::Texture(Color color, const char* srcImgPath, int w, int h, uint32_t format, int access) 
-            :color(color), width(w), height(h), format(format), access(access) 
+        Texture::Texture(Color color, const char* srcImgPath, int w, int h, SDL_RendererFlip flip) 
+            :color(color), width(w), height(h), flip(flip)
         {
             if (!srcImgPath)
             {
+                srcImg = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+                SDL_FillRect(srcImg, NULL, SDL_MapRGBA(srcImg->format, color.r, color.g, color.b, color.a));
                 return;
             }
 
