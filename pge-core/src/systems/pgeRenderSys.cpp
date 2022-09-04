@@ -18,8 +18,8 @@ namespace pge
         void RenderSystem::Init()
         {
             Signature signature;
-            signature.set(mCoordinator->GetComponentType<SpriteCMP>());
-            signature.set(mCoordinator->GetComponentType<TransformCMP>());
+            signature.set(mCoordinator->GetComponentType<Sprite>());
+            signature.set(mCoordinator->GetComponentType<Transform>());
             mCoordinator->SetSystemSignature<RenderSystem>(signature);
         }
 
@@ -27,8 +27,8 @@ namespace pge
         {
             for (auto& entity : mEntities)
             {
-                auto& spriteCmp = mCoordinator->GetComponent<SpriteCMP>(entity);
-                auto& transformCmp = mCoordinator->GetComponent<TransformCMP>(entity);
+                auto& spriteCmp = mCoordinator->GetComponent<Sprite>(entity);
+                auto& transformCmp = mCoordinator->GetComponent<Transform>(entity);
 
                 mRenderer->Submit(spriteCmp.texture, 
                                 glm::vec4(spriteCmp.currentFramePosition.x, spriteCmp.currentFramePosition.y, spriteCmp.currentFrameSize.x, spriteCmp.currentFrameSize.y),

@@ -17,3 +17,5 @@
 #include "PGE/systems/pgeSystems.h"
 
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTime.h"
+#include "PGE/utils/pgeTypes.h"

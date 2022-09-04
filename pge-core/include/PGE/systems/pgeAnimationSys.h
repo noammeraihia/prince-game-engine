@@ -8,18 +8,17 @@ namespace pge
 {
     namespace ecs
     {
-        class PhysicsSystem : public System
+        class AnimationSystem : public System
         {
         public:
-            PhysicsSystem(ECSCoordinator* coordinator, float gravity);
-            ~PhysicsSystem();
+            AnimationSystem(ECSCoordinator* coordinator);
+            ~AnimationSystem();
 
             void Init();
-            void Update(float dt);
+            void Update(f32 dt);
 
         private:
             ECSCoordinator* mCoordinator;
-            float mGravity;
 
         };
     }

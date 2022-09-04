@@ -4,7 +4,9 @@
 #include <SDL2/SDL.h>
 
 #include "PGE/events/pgeInput.h"
+
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
 
 namespace pge
 {
@@ -22,6 +24,6 @@ namespace pge
 
         };
 
-        void Handle(EHData* EHD, bool* isAppRunning);
+        void Handle(EHData* EHD, b8* isAppRunning);
     };
 }

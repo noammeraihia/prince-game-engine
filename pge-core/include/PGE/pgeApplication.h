@@ -4,6 +4,7 @@
 
 #include "PGE/core/pgeCore.h"
 
+#include "PGE/utils/pgeTypes.h"
 #include "PGE/utils/pgeTime.h"
 
 #include "PGE/graphics/pgeWindow.h"
@@ -13,6 +14,8 @@
 #include "PGE/events/pgeEvent.h"
 
 #include "PGE/ecs/pgeEcs.h"
+#include "PGE/components/components.h"
+#include "PGE/systems/pgeSystems.h"
 
 namespace pge
 {
@@ -28,12 +31,17 @@ namespace pge
 
         void _InitECS();
 
-        inline bool _GetKeyDown(SDL_Scancode sc)
+        inline b8 _GetKeyDown(SDL_Scancode sc)
         {
             return kinput::__GetKeyDown(&mEHD.KID, sc);
         }
 
-        inline float _GetDT()
+        inline glm::vec2 _GetMousePos()
+        {
+            return glm::vec2(mEHD.KID.mousePosX, mEHD.KID.mousePosY);
+        }
+
+        inline f32 _GetDT()
         {
             return mTimeStep.deltaTime;
         }
@@ -44,7 +52,7 @@ namespace pge
         void _MainLoop();
 
     protected:
-        bool mIsRunning;
+        b8 mIsRunning;
         TSData mTimeStep;
 
         graphics::Window* mWindow;
@@ -53,6 +61,9 @@ namespace pge
         ecs::ECSCoordinator* mECS;
 
         ehandler::EHData mEHD;
+
+        std::shared_ptr<pge::ecs::RenderSystem> mRenderSystem;
+        std::shared_ptr<pge::ecs::AnimationSystem> mAnimationSystem;
     };
 
     Application* AppInit();

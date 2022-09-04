@@ -12,13 +12,13 @@ namespace pge
         void KeyUp(KIData* KID)
         {
             KID->keyStates = SDL_GetKeyboardState(nullptr);
-            PGE_LOG(PGELLVL_INFO, "Key up");
+            PGE_LOG(PGELLVL_DEBUG, "Key up");
         }
 
         void KeyDown(KIData* KID)
         {
             KID->keyStates = SDL_GetKeyboardState(nullptr);
-            PGE_LOG(PGELLVL_INFO, "Key down");
+            PGE_LOG(PGELLVL_DEBUG, "Key down");
         }
     }
 }

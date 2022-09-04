@@ -4,9 +4,9 @@
 
 namespace pge
 {
-    inline float getTime()
+    inline f32 getTime()
     {
-        float t = SDL_GetTicks();
+        f32 t = SDL_GetTicks();
         t *= 0.001f;
 
         return t;
@@ -14,9 +14,9 @@ namespace pge
 
     struct TSData
     {
-        const float timeStep = 0.01f;
-        float accumulator = 0.f;
-        float currentTime = getTime();
-        float deltaTime;
+        const f32 timeStep = 0.01f;
+        f32 accumulator = 0.f;
+        f32 currentTime = getTime();
+        f32 deltaTime;
     };
 }

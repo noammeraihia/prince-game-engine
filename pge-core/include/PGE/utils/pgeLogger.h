@@ -8,6 +8,8 @@
 #include <iostream>
 #include <map>
 
+#include "PGE/utils/pgeTypes.h"
+
 namespace pge
 {
     enum LogLevel 
@@ -24,11 +26,12 @@ namespace pge
     public:
 
         static void Init();
-        static int Log(LogLevel lvl, const char* fmt, ...);
+        static i32 Log(LogLevel lvl, const char* fmt, ...);
 
     private:
         static std::map<LogLevel, const char*> sLLvl2LStr;
-        static std::map<LogLevel, int> sLLvl2LClr;
+        static std::map<LogLevel, i32> sLLvl2LClr;
+        static b8 sDebug;
     };
 }
 

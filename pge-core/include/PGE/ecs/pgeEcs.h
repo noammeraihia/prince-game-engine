@@ -10,16 +10,17 @@
 #include <typeinfo> 
 
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
 
 namespace pge
 {
     namespace ecs
     {
-        using EntityID = uint32_t;
-        const uint16_t MAX_ENTITIES = 1024;
+        using EntityID = ui32;
+        const ui16 MAX_ENTITIES = 1024;
 
-        using ComponentType = uint8_t;
-        const uint8_t MAX_COMPONENTS = 32;
+        using ComponentType = ui8;
+        const ui8 MAX_COMPONENTS = 32;
 
         using Signature = std::bitset<MAX_COMPONENTS>;
 
@@ -38,7 +39,7 @@ namespace pge
             std::queue<EntityID> mAvailableEntities{};
             std::array<Signature, MAX_ENTITIES> mSignatures{};
 
-            uint32_t mLivingEntityCount{};
+            ui32 mLivingEntityCount{};
         };
 
         class IComponentArray

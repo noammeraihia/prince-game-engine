@@ -31,7 +31,7 @@ namespace pge
             
         }
 
-        Texture::Texture(Color color, const char* srcImgPath, int w, int h, SDL_RendererFlip flip) 
+        Texture::Texture(Color color, const char* srcImgPath, i32 w, i32 h, SDL_RendererFlip flip) 
             :color(color), width(w), height(h), flip(flip)
         {
             if (!srcImgPath)

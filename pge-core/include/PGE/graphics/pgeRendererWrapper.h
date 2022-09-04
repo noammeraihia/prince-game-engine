@@ -34,7 +34,10 @@ namespace pge
 
             inline void Clear() { SDL_RenderClear(mHandle); }
             void ClearScreen();
+
             void Submit(Texture* tex, glm::vec4 src, glm::vec4 dst, float rotation);
+            void SubmitRect(glm::vec4 rect, Color color);
+
             void Flush();
 
         private:

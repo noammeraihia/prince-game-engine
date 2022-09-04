@@ -1,20 +1,17 @@
 #pragma once
 
 #include "PGE/utils/pgeLogger.h"
-#include "PGE/ecs/pgeEcs.h"
+#include "PGE/utils/pgeTypes.h"
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 namespace pge
 {
-    namespace ecs
+    struct Transform
     {
-        struct TransformCMP
-        {
-            glm::vec2 position;
-            glm::vec2 scale;
-            float rotation;
-        };
-    }
+        glm::vec2 position;
+        glm::vec2 scale;
+        f32 rotation;
+    };
 }

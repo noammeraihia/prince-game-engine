@@ -2,7 +2,9 @@
 
 #include <SDL2/SDL.h>
 
-#include <PGE/utils/pgeLogger.h>
+#include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
+
 #include "PGE/graphics/pgeColor.h"
 
 #include <vector>
@@ -14,12 +16,12 @@ namespace pge
         struct Texture
         {
             Texture();
-            Texture(Color color, const char* srcImgPath, int w, int h, SDL_RendererFlip flip);
+            Texture(Color color, const char* srcImgPath, i32 w, i32 h, SDL_RendererFlip flip);
 
             SDL_Texture* handle;
             Color color;
             SDL_Surface* srcImg;
-            int width, height;
+            i32 width, height;
             SDL_RendererFlip flip;
         };
         

@@ -4,7 +4,7 @@ namespace pge
 {
     namespace core
     {
-        int Init()
+        i8 Init()
         {
             if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
             {
@@ -13,6 +13,8 @@ namespace pge
             }
 
             PGE_LOG(PGELLVL_INFO, "SDL Initialization success");
+
+            return 0;
         }
     }
 }

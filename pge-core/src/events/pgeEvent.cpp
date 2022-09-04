@@ -4,7 +4,7 @@ namespace pge
 {
     namespace ehandler
     {
-        void Handle(EHData* EHD, bool* isAppRunning)
+        void Handle(EHData* EHD, b8* isAppRunning)
         {
             while (SDL_PollEvent(&EHD->event))
             {
@@ -21,6 +21,10 @@ namespace pge
 
                 case SDL_KEYUP:
                     kinput::KeyUp(&EHD->KID);
+                    break;
+
+                case SDL_MOUSEMOTION:
+                    SDL_GetGlobalMouseState(&EHD->KID.mousePosX, &EHD->KID.mousePosY);
                     break;
 
                 default:

@@ -13,6 +13,16 @@ namespace pge
         mTexMan = new graphics::TextureManager();
         mECS = new ecs::ECSCoordinator();
         mEHD = ehandler::EHData();
+
+        mECS->RegisterComponent<pge::Sprite>();
+        mECS->RegisterComponent<pge::AnimationMachine>();
+	    mECS->RegisterComponent<pge::Transform>();
+
+        mAnimationSystem = mECS->RegisterSystem<pge::ecs::AnimationSystem>(mECS);
+        mAnimationSystem->Init();
+
+        mRenderSystem = mECS->RegisterSystem<pge::ecs::RenderSystem>(mECS, mRenderer);
+        mRenderSystem->Init();
     }
 
     Application::~Application()
@@ -61,6 +71,10 @@ namespace pge
             }
 
             mRenderer->ClearScreen();
+
+            mAnimationSystem->Update(_GetDT());
+            mRenderSystem->Update();
+
             Run();
             mRenderer->Flush();
         }

@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
 
 namespace pge
 {
@@ -11,7 +14,8 @@ namespace pge
     {
         struct KIData
         {
-            const uint8_t* keyStates;
+            const ui8* keyStates;
+            i32 mousePosX, mousePosY;
         };
 
         bool __GetKeyDown(KIData* KID, SDL_Scancode sc);

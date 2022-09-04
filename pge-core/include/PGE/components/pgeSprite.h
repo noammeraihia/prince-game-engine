@@ -1,6 +1,8 @@
 #pragma once
 
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
+
 #include "PGE/graphics/pgeTexture.h"
 
 #include <glm/glm.hpp>
@@ -8,14 +10,11 @@
 
 namespace pge
 {
-    namespace ecs
+    struct Sprite
     {
-        struct SpriteCMP
-        {
-            graphics::Texture* texture;
-            glm::vec2 currentFramePosition;
-            glm::vec2 currentFrameSize;
+        graphics::Texture* texture;
+        glm::vec2 currentFramePosition;
+        glm::vec2 currentFrameSize;
 
-        };
-    }
+    };
 }

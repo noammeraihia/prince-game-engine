@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "PGE/utils/pgeLogger.h"
+#include "PGE/utils/pgeTypes.h"
 
 namespace pge
 {
@@ -14,8 +15,8 @@ namespace pge
             Color();
             Color(const Color& color);
             Color(SDL_Color color);
-            Color(uint32_t ac);
-            Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+            Color(ui32 ac);
+            Color(ui8 r, ui8 g, ui8 b, ui8 a);
 
             ~Color();
 
@@ -34,7 +35,7 @@ namespace pge
                 return cstrName;
             };
 
-            uint8_t r, g, b, a;
+            ui8 r, g, b, a;
             char cstrName[25];
 
         };

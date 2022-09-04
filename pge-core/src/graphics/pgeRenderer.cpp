@@ -36,8 +36,8 @@ namespace pge
 
         void RendererWrapper::Submit(Texture* tex, glm::vec4 src, glm::vec4 dst, float rotation)
         {
-            SDL_Rect _src = {(int)src.x, (int)src.y, (int)src.z, (int)src.w};
-            SDL_Rect _dst = {(int)dst.x, (int)dst.y, (int)dst.z, (int)dst.w};
+            SDL_Rect _src = {(i32)src.x, (i32)src.y, (i32)src.z, (i32)src.w};
+            SDL_Rect _dst = {(i32)dst.x, (i32)dst.y, (i32)dst.z, (i32)dst.w};
 
             SetDrawColor(tex->color);
             SDL_RenderCopyEx(mHandle,
@@ -50,8 +50,17 @@ namespace pge
 
         }
 
+        void RendererWrapper::SubmitRect(glm::vec4 rect, Color color)
+        {
+            SetDrawColor(color);
+            SDL_Rect sdlRect = {.x = (i32)rect.x, .y = (i32)rect.y, .w = (i32)rect.z, .h = (i32)rect.w};
+            SDL_RenderDrawRect(mHandle, &sdlRect);
+
+        }
+
         void RendererWrapper::Flush()
         {
+            
             SDL_RenderPresent(mHandle);
         }
 
