@@ -32,7 +32,7 @@ namespace pge
                 animCmp.currentState = &animCmp.statesMap.at(animCmp.currentStateName);
 
                 animCmp.currentState->currentFrameF += 1.f * animCmp.currentState->speed * dt;
-                animCmp.currentState->currentFrame = ((int)animCmp.currentState->currentFrameF % animCmp.currentState->frameCount);
+                animCmp.currentState->currentFrame = ((int)animCmp.currentState->currentFrameF % animCmp.currentState->frameCount) + animCmp.currentState->frameStart;
 
                 printf("current frame: %d\n", animCmp.currentState->currentFrame);
 

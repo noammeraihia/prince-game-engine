@@ -30,7 +30,7 @@ public:
         auto& animMachine = mECS->GetComponent<pge::AnimationMachine>(mPlayer);
 
         pge::CreateAnimState(&animMachine, "Idle", 0, 4, 1.f);
-        pge::CreateAnimState(&animMachine, "Transformation", 4, 10, 1.f);
+        pge::CreateAnimState(&animMachine, "Transformation", 0, 10, 5.f);
 
         animMachine.currentStateName = "Transformation";
     }
